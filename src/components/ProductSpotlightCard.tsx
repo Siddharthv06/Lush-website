@@ -63,11 +63,6 @@ const THEME_MAP: Record<string, ProductTheme> = {
     icon: Trees,
     badgeBg: "rgba(249, 115, 22, 0.15)",
   },
-  "liquor-ethanol": {
-    color: "#06B6D4", // Distillate Cyan
-    icon: Droplets,
-    badgeBg: "rgba(6, 182, 212, 0.15)",
-  },
 };
 
 function getProductTheme(product: Product): ProductTheme {
@@ -79,8 +74,6 @@ function getProductTheme(product: Product): ProductTheme {
   switch (product.category) {
     case "Timber":
       return { color: "#F97316", icon: Trees, badgeBg: "rgba(249, 115, 22, 0.15)" };
-    case "Imports":
-      return { color: "#06B6D4", icon: Globe2, badgeBg: "rgba(6, 182, 212, 0.15)" };
     case "Agro-Commodities":
     default:
       return { color: "#C59B27", icon: Leaf, badgeBg: "rgba(197, 155, 39, 0.15)" };

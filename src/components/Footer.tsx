@@ -47,7 +47,6 @@ export default function Footer() {
     { name: 'EXPORT PULSES & GRAINS', spec: 'Chickpeas, Pigeon Peas, Mung', href: '#products' },
     { name: 'KILIMANJARO COFFEE', spec: 'Arabica AAA & Robusta FAQ', href: '#products' },
     { name: 'SUSTAINABLE TIMBER', spec: 'Teak Wood & African Pine', href: '#products' },
-    { name: 'INDUSTRIAL IMPORTS', spec: 'Ethanol & Agro Machinery', href: '#products' },
   ];
 
   const tradePorts = [

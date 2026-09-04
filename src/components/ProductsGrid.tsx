@@ -13,7 +13,7 @@ export default function ProductsGrid() {
   const [activeModalProduct, setActiveModalProduct] = useState<Product | null>(null);
   const [hoveredProductId, setHoveredProductId] = useState<string | null>(null);
 
-  const categories = ['All', 'Agro-Commodities', 'Timber', 'Imports'];
+  const categories = ['All', 'Agro-Commodities', 'Timber'];
 
   const filteredProducts = selectedCategory === 'All'
     ? PRODUCTS_DATA

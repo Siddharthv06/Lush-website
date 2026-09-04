@@ -11,14 +11,14 @@ export default function GlobalReach() {
   const tradeRoutes = [
     {
       region: 'Africa Sourcing Hubs',
-      hubs: 'Mtwara & Dar es Salaam Ports (Tanzania), Mauritius',
-      focus: 'Primary RCN, Pulses, Coffee, Timber Sourcing & ENA Spirits Imports',
+      hubs: 'Mtwara & Dar es Salaam Ports (Tanzania)',
+      focus: 'Primary RCN, Pulses, Coffee & Certified Timber Sourcing',
       icon: Anchor,
     },
     {
       region: 'Asia & Middle East',
       hubs: 'India, Vietnam, China, UAE (Dubai)',
-      focus: 'Raw Cashew Nut Export & High-Grade Spirit / Ethanol Imports',
+      focus: 'Raw Cashew Nut, Cashew Kernels & Agro-Commodities Export',
       icon: Ship,
     },
     {

@@ -262,7 +262,6 @@ export default function ContactSection() {
                         <option value="PULSES">PULSES (Chickpeas, Pigeon Peas, Kidney Beans, Green Mung Beans)</option>
                         <option value="COFFEE">COFFEE (Arabica & Robusta)</option>
                         <option value="TIMBER">TIMBER (Teak Wood & Pine Wood)</option>
-                        <option value="LIQUOR & ETHANOL IMPORTS">LIQUOR & ETHANOL IMPORTS</option>
                       </select>
                     </div>
                   </div>

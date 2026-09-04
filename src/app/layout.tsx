@@ -20,7 +20,7 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.lushtradecorptz.com'),
   title: 'Lush Trade Corp Tanzania Limited | Africa’s Most Trusted Sourcing Partner',
-  description: 'Lush Trade Corp Tanzania Limited is a dynamic export-import enterprise based in Mtwara & Dar es Salaam, Tanzania. Exporters of Raw Cashew Nuts (RCN 50–55 LBS+ outturn), Cashew Kernels, Pulses, Coffee, Timber, and Ethanol Imports across Africa, Asia, and Europe.',
+  description: 'Lush Trade Corp Tanzania Limited is a dynamic export-import enterprise based in Mtwara & Dar es Salaam, Tanzania. Exporters of Raw Cashew Nuts (RCN 50–55 LBS+ outturn), Cashew Kernels, Pulses, Coffee, and Timber across Africa, Asia, and Europe.',
   keywords: [
     'Tanzania Cashew Nuts Exporter',
     'Raw Cashew Nuts RCN Mtwara',
@@ -29,7 +29,6 @@ export const metadata: Metadata = {
     'Tanzanian Pulses Chickpeas Pigeon Peas Mung Beans',
     'Kilimanjaro Arabica Coffee Export',
     'Teak Wood Timber Tanzania',
-    'Industrial Ethanol Imports East Africa',
     'Mtwara Port Agro Commodities',
   ],
   authors: [{ name: 'Lush Trade Corp Tanzania Limited' }],

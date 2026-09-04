@@ -1,7 +1,7 @@
 export interface Product {
   id: string;
   name: string;
-  category: 'Agro-Commodities' | 'Timber' | 'Imports';
+  category: 'Agro-Commodities' | 'Timber';
   tagline: string;
   image: string;
   shortDesc: string;
@@ -167,28 +167,6 @@ export const PRODUCTS_DATA: Product[] = [
       'Harvest Origins: Mafinga, Iringa, and Morogoro forestry concessions',
       'Kiln-dried to international construction and joinery moisture standards',
       'Containerized stuffed shipments with full phytosanitary clearance',
-    ],
-  },
-  {
-    id: 'liquor-ethanol',
-    name: 'LIQUOR & ETHANOL IMPORTS',
-    category: 'Imports',
-    tagline: 'High-Grade Industrial Ethanol & Premium Imported Liquor',
-    image: '/images/hero.jpg',
-    shortDesc: 'Specializing in importing high-grade and premium liquor from India and Mauritius for East Africa.',
-    fullDesc: 'Lush Trade Corp also specializes in importing high-grade and premium liquor from India and Mauritius, catering to bulk, wholesale and retail demands across East Africa.',
-    specs: [
-      { label: 'Specialization', value: 'Importing High-Grade Ethanol & Premium Liquor' },
-      { label: 'Source Countries', value: 'India and Mauritius' },
-      { label: 'Target Demand', value: 'Bulk, Wholesale & Retail across East Africa' },
-      { label: 'Quality Standard', value: 'Certified High-Grade Ethyl Alcohol & Spirits' },
-    ],
-    origins: ['India', 'Mauritius'],
-    seoTags: ['Ethanol import Tanzania', 'liquor supplier East Africa', 'industrial ethanol'],
-    highlights: [
-      'Established trade bridges with leading distilleries in India & Mauritius',
-      'Catering to commercial, industrial, and beverage distributors in East Africa',
-      'Streamlined customs clearance and tax compliance in Dar es Salaam',
     ],
   },
 ];
