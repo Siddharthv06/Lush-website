@@ -38,50 +38,31 @@ export default function ContactSection() {
     setErrorMessage(null);
 
     try {
-      let success = false;
+      // Direct submission to Google Apps Script (100% compatible with static export & Render static sites)
+      await fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone || 'N/A',
+          product: formData.product,
+          message: formData.message,
+          recipient: 'kurtamalai@gmail.com',
+        }),
+      });
 
-      // 1. Try internal API route first
-      try {
-        const response = await fetch('/api/contact', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData),
-        });
-
-        if (response.ok) {
-          const result = await response.json();
-          if (result.success) {
-            success = true;
-          }
-        }
-      } catch {
-        // Internal route unavailable (e.g. static site hosting on Render)
-      }
-
-      // 2. Direct submission fallback (works 100% on both static & server hosting)
-      if (!success) {
-        await fetch(SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ...formData,
-            recipient: 'kurtamalai@gmail.com',
-          }),
-        });
-        success = true;
-      }
-
-      if (success) {
-        setSubmitted(true);
-        setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          product: 'RAW CASHEW NUTS (RCN)',
-          message: '',
-        });
-      }
+      setSubmitted(true);
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        product: 'RAW CASHEW NUTS (RCN)',
+        message: '',
+      });
     } catch {
       setErrorMessage('Network error. Please reach out via WhatsApp or phone.');
     } finally {
