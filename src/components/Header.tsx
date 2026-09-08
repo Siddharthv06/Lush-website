@@ -121,7 +121,7 @@ export default function Header() {
           </nav>
 
           {/* Right: Sleek Luxury Pill "Get Started" Button + Language Selector */}
-          <div className="hidden sm:flex items-center space-x-3 z-10">
+          <div className="hidden lg:flex items-center space-x-3 z-10">
             <a
               href="#contact"
               onClick={() => setActiveSection('contact')}

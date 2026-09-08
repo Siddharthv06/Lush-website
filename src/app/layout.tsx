@@ -77,6 +77,30 @@ export default function RootLayout({
         />
       </head>
       <body className="font-sans bg-brand-cream text-brand-dark antialiased selection:bg-brand-gold selection:text-brand-dark">
+        {/* Global Google Translate Engine container */}
+        <div id="google_translate_element" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.googleTranslateElementInit = function() {
+                if (window.google && window.google.translate) {
+                  new window.google.translate.TranslateElement(
+                    {
+                      pageLanguage: 'en',
+                      includedLanguages: 'en,sw,hi,vi,ar,fr,zh-CN,es,de',
+                      autoDisplay: false,
+                    },
+                    'google_translate_element'
+                  );
+                }
+              };
+            `,
+          }}
+        />
+        <script
+          src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+          async
+        />
         <SmoothScroll>
           <Header />
           <main className="min-h-screen">{children}</main>

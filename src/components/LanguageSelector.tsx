@@ -45,11 +45,10 @@ export default function LanguageSelector({
   const [currentLang, setCurrentLang] = useState('en');
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Initialize Google Translate Element once
+  // Read active translation language on mount
   useEffect(() => {
-    // Read existing translation cookie if any
     const getSavedLang = () => {
-      const match = document.cookie.match(/googtrans=\/en\/([a-zA-Z\-]+)/);
+      const match = document.cookie.match(/googtrans=\/(?:auto|en)\/([a-zA-Z\-]+)/);
       if (match && match[1]) {
         return match[1];
       }
@@ -57,30 +56,6 @@ export default function LanguageSelector({
     };
 
     setCurrentLang(getSavedLang());
-
-    // Register callback for Google Translate script
-    window.googleTranslateElementInit = () => {
-      if (window.google?.translate?.TranslateElement) {
-        new window.google.translate.TranslateElement(
-          {
-            pageLanguage: 'en',
-            includedLanguages: 'en,sw,hi,vi,ar,fr,zh-CN,es,de',
-            autoDisplay: false,
-          },
-          'google_translate_element'
-        );
-      }
-    };
-
-    // Inject Google Translate script if not present
-    if (!document.getElementById('google-translate-script')) {
-      const script = document.createElement('script');
-      script.id = 'google-translate-script';
-      script.type = 'text/javascript';
-      script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-      script.async = true;
-      document.body.appendChild(script);
-    }
 
     // Close on outside click
     const handleClickOutside = (event: MouseEvent) => {
@@ -99,26 +74,87 @@ export default function LanguageSelector({
 
     const hostname = window.location.hostname;
 
+    // 1. Update cookies in the background so future visits/reloads preserve choice
     if (langCode === 'en') {
-      // Clear cookie to return to original English
-      document.cookie = 'googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
-      document.cookie = `googtrans=; path=/; domain=${hostname}; expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
-      document.cookie = `googtrans=; path=/; domain=.${hostname}; expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
+      document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${hostname};`;
+      document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.${hostname};`;
+      const parts = hostname.split('.');
+      if (parts.length > 2 && !hostname.endsWith('.onrender.com') && !hostname.includes('localhost')) {
+        const root = parts.slice(-2).join('.');
+        document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.${root};`;
+      }
     } else {
-      // Set google translation cookie: /<source>/<target>
+      document.cookie = `googtrans=/auto/${langCode}; path=/;`;
       document.cookie = `googtrans=/en/${langCode}; path=/;`;
-      document.cookie = `googtrans=/en/${langCode}; path=/; domain=${hostname};`;
-      document.cookie = `googtrans=/en/${langCode}; path=/; domain=.${hostname};`;
+      if (hostname && hostname !== 'localhost') {
+        document.cookie = `googtrans=/auto/${langCode}; path=/; domain=${hostname};`;
+        document.cookie = `googtrans=/en/${langCode}; path=/; domain=${hostname};`;
+      }
     }
 
-    // Trigger google translate select if element is loaded
-    const select = document.querySelector('.goog-te-combo') as HTMLSelectElement | null;
-    if (select) {
-      select.value = langCode;
-      select.dispatchEvent(new Event('change', { bubbles: true }));
-    } else {
-      // Fallback reload so Google Translate boots with cookie
-      window.location.reload();
+    // 2. In-place instant translation without reloading the page
+    const applyTranslation = (code: string): boolean => {
+      if (code === 'en') {
+        let restored = false;
+        try {
+          const bannerIframe = document.querySelector('.goog-te-banner-frame') as HTMLIFrameElement | null;
+          if (bannerIframe) {
+            const innerDoc = bannerIframe.contentDocument || bannerIframe.contentWindow?.document;
+            if (innerDoc) {
+              const buttons = innerDoc.querySelectorAll('button');
+              for (let i = 0; i < buttons.length; i++) {
+                const text = (buttons[i].innerText || buttons[i].id).toLowerCase();
+                if (text.includes('restore') || text.includes('original')) {
+                  buttons[i].click();
+                  restored = true;
+                  break;
+                }
+              }
+            }
+          }
+        } catch {}
+
+        const select = document.querySelector('.goog-te-combo') as HTMLSelectElement | null;
+        if (select) {
+          const enOption = Array.from(select.options).find((o) => o.value === 'en' || o.value === '');
+          if (enOption) {
+            select.value = enOption.value;
+          } else {
+            select.selectedIndex = 0;
+          }
+          select.dispatchEvent(new Event('change', { bubbles: true }));
+          if (typeof (select as any).onchange === 'function') {
+            (select as any).onchange();
+          }
+          restored = true;
+        }
+        return restored;
+      }
+
+      const select = document.querySelector('.goog-te-combo') as HTMLSelectElement | null;
+      if (select) {
+        select.value = code;
+        select.dispatchEvent(new Event('change', { bubbles: true }));
+        if (typeof (select as any).onchange === 'function') {
+          (select as any).onchange();
+        }
+        return true;
+      }
+      return false;
+    };
+
+    // Execute immediately without reloading
+    const success = applyTranslation(langCode);
+    if (!success) {
+      // If widget is still mounting, retry briefly
+      let retries = 0;
+      const timer = setInterval(() => {
+        retries++;
+        if (applyTranslation(langCode) || retries > 25) {
+          clearInterval(timer);
+        }
+      }, 100);
     }
   };
 
@@ -165,9 +201,6 @@ export default function LanguageSelector({
 
   return (
     <div ref={dropdownRef} className="relative inline-block text-left">
-      {/* Hidden container for Google Translate Engine */}
-      <div id="google_translate_element" className="hidden" />
-
       {/* Trigger Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
