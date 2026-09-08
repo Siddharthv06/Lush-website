@@ -9,15 +9,8 @@ import { Layers } from 'lucide-react';
 import WaveDivider from './WaveDivider';
 
 export default function ProductsGrid() {
-  const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [activeModalProduct, setActiveModalProduct] = useState<Product | null>(null);
   const [hoveredProductId, setHoveredProductId] = useState<string | null>(null);
-
-  const categories = ['All', 'Agro-Commodities', 'Timber'];
-
-  const filteredProducts = selectedCategory === 'All'
-    ? PRODUCTS_DATA
-    : PRODUCTS_DATA.filter(p => p.category === selectedCategory);
 
   return (
     <section id="products" className="py-24 bg-gradient-to-b from-[#0C1E34] via-[#10243E] to-[#0A192B] text-white relative overflow-hidden">
@@ -39,7 +32,7 @@ export default function ProductsGrid() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
+        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
           <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md">
             <Layers className="w-3.5 h-3.5 text-brand-gold" />
             <span className="text-xs font-bold text-sky-200 uppercase tracking-wider">
@@ -55,29 +48,12 @@ export default function ProductsGrid() {
             Certified origin grading, export specifications, and verified allocations.
           </p>
 
-          <div className="w-20 h-1 bg-gradient-to-r from-brand-gold to-sky-400 mx-auto rounded-full" />
-        </div>
-
-        {/* Category Tabs Filter */}
-        <div className="flex flex-wrap justify-center items-center gap-3 mb-12">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 border ${
-                selectedCategory === cat
-                  ? 'bg-gradient-to-r from-brand-gold via-amber-400 to-brand-goldLight text-brand-dark border-brand-gold shadow-glow scale-105'
-                  : 'bg-white/10 text-slate-200 border-white/15 hover:bg-white/15 hover:text-white hover:border-white/30'
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+          <div className="w-20 h-1 bg-gradient-to-r from-brand-gold to-sky-400 mx-auto rounded-full mt-4" />
         </div>
 
         {/* Products Grid with Magnetic 3D Tilt, Aurora Glow & Focus-Dim Siblings */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProducts.map((product) => (
+          {PRODUCTS_DATA.map((product) => (
             <ProductSpotlightCard
               key={product.id}
               product={product}

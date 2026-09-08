@@ -27,6 +27,7 @@ interface LanguageSelectorProps {
   isHomePage?: boolean;
   isScrolled?: boolean;
   isMobile?: boolean;
+  hasWhiteBg?: boolean;
 }
 
 declare global {
@@ -40,6 +41,7 @@ export default function LanguageSelector({
   isHomePage = true,
   isScrolled = false,
   isMobile = false,
+  hasWhiteBg = false,
 }: LanguageSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [currentLang, setCurrentLang] = useState('en');
@@ -194,10 +196,10 @@ export default function LanguageSelector({
     );
   }
 
-  // Desktop Button styling based on header theme
-  const buttonBorderClass = !isHomePage || !isScrolled
-    ? 'border-white/20 hover:border-brand-gold/60 bg-white/10 hover:bg-white/15 text-white'
-    : 'border-slate-300 hover:border-brand-gold/60 bg-slate-100/90 hover:bg-slate-200/90 text-slate-800';
+  // Desktop Button styling matching current header theme
+  const buttonBorderClass = hasWhiteBg
+    ? 'border-black/10 hover:border-brand-gold/60 bg-white/60 hover:bg-white/90 text-slate-800'
+    : 'border-white/20 hover:border-brand-gold/60 bg-white/10 hover:bg-white/15 text-white';
 
   return (
     <div ref={dropdownRef} className="relative inline-block text-left">

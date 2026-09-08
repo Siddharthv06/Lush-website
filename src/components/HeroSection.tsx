@@ -171,10 +171,7 @@ export default function HeroSection() {
             />
           </h1>
 
-          {/* Subheading */}
-          <p className="hero-subheading font-normal text-slate-200/90 text-center mx-auto drop-shadow-md z-30 px-4">
-            {HERO_CONFIG.subheading.text}
-          </p>
+          
         </motion.div>
 
         {/* Organic Ocean Wave Curve Divider (Seamless boundary into About section) */}

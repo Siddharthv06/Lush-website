@@ -13,7 +13,7 @@ export default function AboutSection() {
   return (
     <section id="about" className="py-28 bg-[#FAF9F6] text-brand-dark relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Section Tag & Heading */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-brand-mint border border-brand-leaf/20">
@@ -72,7 +72,7 @@ export default function AboutSection() {
         {/* Corporate Pillars: 3-Column Card Grid */}
         <div className="py-16 border-b border-slate-200">
           <div className="grid md:grid-cols-3 gap-8 lg:gap-10">
-            
+
             {/* 01: Vision */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}

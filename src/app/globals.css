@@ -62,7 +62,7 @@ body {
   border: 1px solid rgba(197, 155, 39, 0.2);
 }
 
-/* Remove Side Scrollbar for all browsers while maintaining smooth scrolling */
+/* Remove Side Scrollbar across all browsers while maintaining smooth scrolling */
 ::-webkit-scrollbar {
   display: none !important;
   width: 0 !important;

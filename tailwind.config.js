@@ -25,6 +25,7 @@ module.exports = {
       fontFamily: {
         sans: ['var(--font-sans)', 'sans-serif'],
         heading: ['var(--font-heading)', 'sans-serif'],
+        logo: ['var(--font-logo)', 'serif'],
       },
       boxShadow: {
         'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.08)',
