@@ -5,7 +5,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { Shield } from 'lucide-react';
 import { ENTERPRISE_INFO } from '@/data/products';
 import KineticCenterBuild from '@/components/smoothui/components/kinetic-center-build';
-import GradientWaves from './GradientWaves';
+import ShipScroll from './ShipScroll';
 
 /**
  * =========================================================================
@@ -67,23 +67,30 @@ export const HERO_CONFIG = {
 
 export default function HeroSection() {
   const heroRef = useRef<HTMLElement>(null);
-  const { scrollY } = useScroll();
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ['start start', 'end end'],
+  });
 
-  // Scroll storytelling transitions:
-  // scrollY = 0 -> 60px: ONLY waves background visible!
-  // scrollY = 60px -> 500px: Ship takes more scroll & time sailing from LEFT to RIGHT into center!
-  // scrollY = 500px -> 720px: Ship arrives in center, THEN after that the main component (headline & subheading) appears!
-  // scrollY = 720px -> 1050px: Resting showcase with ship in center!
-  // scrollY = 1050px -> 1450px: Main component fades away as ship embarks to the main website!
-  const heroContentOpacity = useTransform(scrollY, [500, 720, 1050, 1450], [0, 1, 1, 0]);
-  const heroContentY = useTransform(scrollY, [500, 720, 1050, 1450], [30, 0, 0, -30]);
-  const heroContentScale = useTransform(scrollY, [500, 720, 1050, 1450], [0.96, 1, 1, 0.96]);
+  // Scrollytelling Tour progression:
+  // 0% -> 4%: First frame shows clean with no text obstruction; user sees the initial vessel on the horizon
+  // 4% -> 18%: As user scrolls, frames move and the home text slowly appears like an interactive tour
+  // 18% -> 100%: Home text remains fully visible all the way while scrolling down to the About section
+  const heroContentOpacity = useTransform(scrollYProgress, [0, 0.04, 0.18, 1], [0, 0, 1, 1]);
+  const heroContentY = useTransform(scrollYProgress, [0, 0.04, 0.18, 1], [35, 35, 0, 0]);
+  const heroContentScale = useTransform(scrollYProgress, [0, 0.04, 0.18, 1], [0.96, 0.96, 1, 1]);
+
+
+
+  // Bottom wave divider smoothly emerges at the very end to transition into About section
+  const waveOpacity = useTransform(scrollYProgress, [0.94, 0.99], [0, 1]);
+  const waveY = useTransform(scrollYProgress, [0.94, 0.99], [28, 0]);
 
   return (
     <section
       ref={heroRef}
       id="hero"
-      className="relative w-full min-h-[260vh]"
+      className="relative w-full min-h-[500vh] bg-[#060B12]"
     >
       <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
         {/* Direct CSS injection so modifying HERO_CONFIG values instantly changes font size and ship size */}
@@ -101,22 +108,6 @@ export default function HeroSection() {
           @media (max-width: 640px) {
             #hero h1.hero-title {
               font-size: ${HERO_CONFIG.heading.mobileFontSize}px;
-            }
-          }
-          #hero-ship-anchor {
-            width: ${HERO_CONFIG.ship.desktopWidth}px;
-            height: ${HERO_CONFIG.ship.desktopHeight}px;
-          }
-          @media (max-width: 1024px) {
-            #hero-ship-anchor {
-              width: ${HERO_CONFIG.ship.tabletWidth}px;
-              height: ${HERO_CONFIG.ship.tabletHeight}px;
-            }
-          }
-          @media (max-width: 640px) {
-            #hero-ship-anchor {
-              width: ${HERO_CONFIG.ship.mobileWidth}px;
-              height: ${HERO_CONFIG.ship.mobileHeight}px;
             }
           }
           #hero p.hero-subheading {
@@ -137,30 +128,9 @@ export default function HeroSection() {
           }
         `}</style>
 
-        {/* 3D Raymarched Ocean Waves Background - Visible on load and throughout sequence */}
-        <div className="absolute inset-0 w-full h-full z-0 overflow-hidden pointer-events-none">
-          <GradientWaves
-            horizonColor="#00a5ff"
-            waveColor="#008eff"
-            crestColor="#FFFFFF"
-            speed={0.4}
-            amplitude={3.25}
-            waveScale={0.6}
-            waveRatio={0.9}
-            swell={35}
-            turbulence={20}
-            tilt={1.11}
-            zoom={1}
-            height={5.5}
-            fogDepth={15}
-            detail="medium"
-            brightness={1}
-            opacity={1}
-            mouseInteraction
-            parallaxStrength={0.5}
-            grain
-            grainIntensity={0.05}
-          />
+        {/* Cinematic Frame-by-Frame Ship Voyage Canvas Layer */}
+        <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
+          <ShipScroll scrollProgress={scrollYProgress} />
         </div>
 
         {/* Hero Content: Pure waves on load, emerges on scroll, fades as ship sails to main website */}
@@ -201,59 +171,38 @@ export default function HeroSection() {
             />
           </h1>
 
-          {/* Center: Ocean Ship Position Anchor */}
-          <div
-            style={{ marginBottom: `${HERO_CONFIG.ship.marginBottom}px` }}
-            className="relative w-full flex justify-center items-center overflow-visible my-2"
-          >
-            <div
-              id="hero-ship-anchor"
-              className="relative flex items-center justify-center pointer-events-none"
-            />
-          </div>
-
-          {/* Subheading Below the Ship */}
+          {/* Subheading */}
           <p className="hero-subheading font-normal text-slate-200/90 text-center mx-auto drop-shadow-md z-30 px-4">
             {HERO_CONFIG.subheading.text}
           </p>
         </motion.div>
 
         {/* Organic Ocean Wave Curve Divider (Seamless boundary into About section) */}
-        <div className="absolute -bottom-px left-0 right-0 w-full overflow-hidden leading-none z-20 pointer-events-none">
+        <motion.div
+          style={{ opacity: waveOpacity, y: waveY }}
+          className="absolute -bottom-[2px] left-0 right-0 w-full overflow-hidden leading-none z-20 pointer-events-none transition-opacity duration-200 text-[#FAF9F6]"
+        >
           <svg
             viewBox="0 0 1440 120"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="relative block w-full h-16 sm:h-20 md:h-28 lg:h-32 text-[#FAF9F6]"
+            className="relative block w-full h-14 sm:h-18 md:h-24 lg:h-28"
             preserveAspectRatio="none"
           >
-            {/* Layer 1: Ambient soft background swell */}
+            {/* Foam crest line with subtle gold sheen */}
             <path
-              d="M0,32 C220,78 440,12 660,52 C880,92 1100,28 1320,68 Q1380,78 1440,72 L1440,120 L0,120 Z"
-              fill="currentColor"
-              fillOpacity="0.25"
-            />
-            {/* Layer 2: Mid-swell wave */}
-            <path
-              d="M0,56 C260,105 500,28 760,72 C1020,116 1220,38 1440,78 L1440,120 L0,120 Z"
-              fill="currentColor"
-              fillOpacity="0.55"
-            />
-            {/* Layer 3: White foam crest line */}
-            <path
-              d="M0,82 C240,124 500,44 760,88 C1020,132 1240,58 1440,92"
-              stroke="#FFFFFF"
+              d="M0,78 C240,120 500,40 760,84 C1020,128 1240,54 1440,88"
+              stroke="rgba(197, 155, 39, 0.45)"
               strokeWidth="1.5"
-              strokeOpacity="0.8"
               fill="none"
             />
-            {/* Layer 4: Solid foreground wave connecting directly into About section background */}
+            {/* Solid foreground wave connecting directly into About section background */}
             <path
-              d="M0,84 C240,126 500,46 760,90 C1020,134 1240,60 1440,94 L1440,120 L0,120 Z"
+              d="M0,80 C240,122 500,42 760,86 C1020,130 1240,56 1440,90 L1440,125 L0,125 Z"
               fill="currentColor"
             />
           </svg>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

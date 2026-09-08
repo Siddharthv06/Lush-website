@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Send, CheckCircle2, Building, Clock, ShieldCheck, Globe } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, CheckCircle2, Clock, Linkedin, Instagram, Facebook, Youtube, MessageCircle } from 'lucide-react';
 import { ENTERPRISE_INFO } from '@/data/products';
 import { TiltCard } from '@/components/motion/tilt-card';
 import KineticCenterBuild from '@/components/smoothui/components/kinetic-center-build';
@@ -17,36 +17,62 @@ export default function ContactSection() {
     message: '',
   });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const socialLinks = [
+    { name: 'LinkedIn', icon: Linkedin, href: 'https://linkedin.com' },
+    { name: 'WhatsApp', icon: MessageCircle, href: 'https://wa.me/255639354286' },
+    { name: 'Instagram', icon: Instagram, href: 'https://instagram.com' },
+    { name: 'Facebook', icon: Facebook, href: 'https://facebook.com' },
+    { name: 'YouTube', icon: Youtube, href: 'https://youtube.com' },
+  ];
+
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setErrorMessage(null);
 
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setSubmitted(true);
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        product: 'RAW CASHEW NUTS (RCN)',
-        message: '',
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
       });
-    }, 1200);
+
+      const result = await response.json();
+
+      if (result.success) {
+        setSubmitted(true);
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          product: 'RAW CASHEW NUTS (RCN)',
+          message: '',
+        });
+      } else {
+        setErrorMessage(result.error || 'Failed to submit inquiry. Please check your setup.');
+      }
+    } catch {
+      setErrorMessage('Network error. Please reach out via WhatsApp or phone.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <section id="contact" className="py-24 bg-brand-cream relative overflow-hidden">
+    <section id="contact" className="py-24 bg-brand-cream text-brand-dark relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-brand-mint border border-brand-leaf/30">
-            <Mail className="w-3.5 h-3.5 text-brand-leaf" />
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-brand-mint border border-brand-leaf/20">
+            <Mail className="w-3.5 h-3.5 text-brand-forest" />
             <span className="text-xs font-bold text-brand-forest uppercase tracking-wider">
-              4. Contact Us
+              Contact Us
             </span>
           </div>
 
@@ -54,11 +80,11 @@ export default function ContactSection() {
             <KineticCenterBuild phrases={["Head Office & Trade Desk"]} />
           </h2>
 
-          <p className="text-slate-600 text-base font-semibold text-brand-forest">
-            &quot;Let&apos;s collaborate to build a long-term trade partnership.&quot;
+          <p className="text-brand-slateMuted text-base max-w-xl mx-auto">
+            Inquire directly for vessel allocations, technical specifications, and FOB/CIF quotations.
           </p>
 
-          <div className="w-20 h-1 bg-gradient-to-r from-brand-gold to-brand-emerald mx-auto rounded-full" />
+          <div className="w-20 h-1 bg-gradient-to-r from-brand-gold to-brand-forest mx-auto rounded-full" />
         </div>
 
         {/* 2-Column Layout: Head Office Card + Contact Form */}
@@ -81,7 +107,7 @@ export default function ContactSection() {
                 {ENTERPRISE_INFO.name}
               </h3>
 
-              <p className="text-slate-300 text-xs mb-8">
+              <p className="text-brand-mint/80 text-xs mb-8">
                 Official Registered Export-Import Headquarters in Southern Tanzania.
               </p>
 
@@ -98,7 +124,7 @@ export default function ContactSection() {
                     <p className="text-sm font-semibold text-white mt-1">
                       {ENTERPRISE_INFO.headOffice.address}
                     </p>
-                    <p className="text-xs text-slate-300">
+                    <p className="text-xs text-brand-mint/80">
                       {ENTERPRISE_INFO.headOffice.poBox}, {ENTERPRISE_INFO.headOffice.city}, {ENTERPRISE_INFO.headOffice.country}
                     </p>
                   </div>
@@ -136,26 +162,29 @@ export default function ContactSection() {
                   </div>
                 </div>
 
-                {/* Website */}
-                <div className="flex items-start space-x-4">
-                  <div className="w-10 h-10 rounded-xl bg-brand-gold/20 border border-brand-gold/40 flex items-center justify-center text-brand-gold shrink-0 mt-1">
-                    <Globe className="w-5 h-5" />
+                {/* Direct Social Channels (All except Twitter) */}
+                <div className="pt-4 border-t border-white/10">
+                  <span className="text-[11px] font-bold text-brand-gold uppercase tracking-wider block mb-2.5">
+                    Official Trade Channels
+                  </span>
+                  <div className="flex items-center gap-2">
+                    {socialLinks.map((s) => {
+                      const Icon = s.icon;
+                      return (
+                        <a
+                          key={s.name}
+                          href={s.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-9 h-9 rounded-xl bg-white/10 hover:bg-brand-gold hover:text-brand-dark border border-white/15 hover:border-brand-gold transition-all flex items-center justify-center text-white"
+                          title={s.name}
+                          aria-label={s.name}
+                        >
+                          <Icon className="w-4 h-4" />
+                        </a>
+                      );
+                    })}
                   </div>
-                  <div>
-                    <h4 className="text-xs font-bold text-brand-gold uppercase tracking-wider">Website</h4>
-                    <span className="text-sm font-bold text-white block mt-1">
-                      {ENTERPRISE_INFO.website}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Dual Presence Note */}
-                <div className="pt-4 border-t border-white/10 flex items-center justify-between text-xs text-slate-300">
-                  <div className="flex items-center space-x-2">
-                    <Building className="w-4 h-4 text-brand-gold" />
-                    <span>Presence: Dar es Salaam & Mtwara, Tanzania</span>
-                  </div>
-                  <ShieldCheck className="w-4 h-4 text-brand-gold" />
                 </div>
 
               </div>
@@ -170,11 +199,11 @@ export default function ContactSection() {
             transition={{ duration: 0.6 }}
             className="lg:col-span-7"
           >
-            <TiltCard max={6} glare={false} className="bg-white rounded-2xl p-8 border border-slate-200 shadow-xl">
+            <TiltCard max={6} glare={false} className="bg-white rounded-2xl p-8 border border-slate-200/80 shadow-xl">
 
               {submitted ? (
                 <div className="py-12 text-center space-y-4 animate-in fade-in duration-300">
-                  <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
+                  <div className="w-16 h-16 bg-brand-mint text-brand-forest rounded-full flex items-center justify-center mx-auto border border-brand-leaf/20">
                     <CheckCircle2 className="w-10 h-10" />
                   </div>
                   <h3 className="text-2xl font-bold text-brand-dark">Thank You for Your Message</h3>
@@ -183,7 +212,7 @@ export default function ContactSection() {
                   </p>
                   <button
                     onClick={() => setSubmitted(false)}
-                    className="inline-flex items-center px-6 py-2.5 rounded-xl bg-brand-forest text-white text-xs font-bold hover:bg-brand-emerald transition-colors mt-4"
+                    className="inline-flex items-center px-6 py-2.5 rounded-xl bg-brand-forest text-white text-xs font-bold hover:bg-brand-emerald transition-colors mt-4 cursor-pointer"
                   >
                     Send Another Inquiry
                   </button>
@@ -192,8 +221,8 @@ export default function ContactSection() {
                 <form onSubmit={handleSubmit} className="space-y-6">
 
                   <div className="border-b border-slate-100 pb-4 mb-2">
-                    <h3 className="text-xl font-bold text-brand-dark">Send a Sourcing or Export Inquiry</h3>
-                    <p className="text-xs text-slate-500 mt-1">Fields: Name, Email, Phone, Product Selection, Message.</p>
+                    <h3 className="text-xl font-bold text-brand-dark">Direct Commercial Inquiry</h3>
+                    <p className="text-xs text-brand-slateMuted mt-1">Submit your commodity requirements for a prompt trade desk quotation.</p>
                   </div>
 
                   <div className="grid sm:grid-cols-2 gap-6">
@@ -209,7 +238,7 @@ export default function ContactSection() {
                         placeholder="Your full name"
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-brand-emerald focus:bg-white transition-all"
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-leaf transition-all"
                       />
                     </div>
 
@@ -225,7 +254,7 @@ export default function ContactSection() {
                         placeholder="yourname@domain.com"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-brand-emerald focus:bg-white transition-all"
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-leaf transition-all"
                       />
                     </div>
                   </div>
@@ -242,7 +271,7 @@ export default function ContactSection() {
                         placeholder="+255..."
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-brand-emerald focus:bg-white transition-all"
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-leaf transition-all"
                       />
                     </div>
 
@@ -255,7 +284,7 @@ export default function ContactSection() {
                         id="product"
                         value={formData.product}
                         onChange={(e) => setFormData({ ...formData, product: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-brand-emerald focus:bg-white transition-all"
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-leaf transition-all"
                       >
                         <option value="RAW CASHEW NUTS (RCN)">RAW CASHEW NUTS (RCN)</option>
                         <option value="CASHEW NUT KERNELS">CASHEW NUT KERNELS</option>
@@ -278,15 +307,22 @@ export default function ContactSection() {
                       placeholder="Specify your trade inquiry, metric tons required, or contract specifications..."
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-brand-emerald focus:bg-white transition-all resize-none"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-leaf transition-all resize-none"
                     />
                   </div>
+
+                  {/* Submission Error Banner */}
+                  {errorMessage && (
+                    <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-medium leading-relaxed">
+                      {errorMessage}
+                    </div>
+                  )}
 
                   {/* Submit Button */}
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full inline-flex items-center justify-center py-4 px-6 rounded-xl font-bold text-brand-dark bg-gradient-to-r from-brand-gold via-yellow-400 to-brand-goldLight shadow-glow hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 disabled:opacity-50"
+                    className="w-full inline-flex items-center justify-center py-4 px-6 rounded-xl font-bold text-brand-dark bg-gradient-to-r from-brand-gold via-brand-goldLight to-brand-gold shadow-glow hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 disabled:opacity-50 cursor-pointer"
                   >
                     {isSubmitting ? (
                       <span className="inline-flex items-center">
@@ -311,7 +347,7 @@ export default function ContactSection() {
       </div>
 
       {/* Organic Wave Curve Transitioning into Footer */}
-      <WaveDivider color="#051811" position="bottom" />
+      <WaveDivider color="#070D14" position="bottom" />
     </section>
   );
 }

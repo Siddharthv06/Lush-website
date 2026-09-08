@@ -20,18 +20,18 @@ export default function ProductsGrid() {
     : PRODUCTS_DATA.filter(p => p.category === selectedCategory);
 
   return (
-    <section id="products" className="py-24 bg-slate-900 text-white relative overflow-hidden">
-      {/* Background Glow */}
-      <div className="absolute top-1/4 left-0 w-96 h-96 bg-brand-emerald/20 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-brand-gold/10 rounded-full blur-3xl pointer-events-none" />
+    <section id="products" className="py-24 bg-gradient-to-b from-[#0C1E34] via-[#10243E] to-[#0A192B] text-white relative overflow-hidden">
+      {/* Radiant Ambient Light Glows */}
+      <div className="absolute top-1/4 left-0 w-96 h-96 bg-sky-500/15 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-brand-gold/15 rounded-full blur-3xl pointer-events-none" />
 
-      {/* Subtle KokonutUI Ambient Dot Grid for depth */}
+      {/* Subtle Dot Grid for Depth */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-15"
+        className="pointer-events-none absolute inset-0 opacity-20"
         style={{
           backgroundImage:
-            "radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px)",
+            "radial-gradient(circle, rgba(255, 255, 255, 0.25) 1px, transparent 1px)",
           backgroundSize: "28px 28px",
         }}
       />
@@ -40,22 +40,22 @@ export default function ProductsGrid() {
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-brand-forest border border-brand-gold/30">
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md">
             <Layers className="w-3.5 h-3.5 text-brand-gold" />
-            <span className="text-xs font-bold text-brand-gold uppercase tracking-wider">
+            <span className="text-xs font-bold text-sky-200 uppercase tracking-wider">
               2. Products Portfolio
             </span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight flex justify-center">
-            <KineticCenterBuild phrases={["Our Core Product Offerings"]} />
+            <KineticCenterBuild phrases={["Commodities Portfolio"]} />
           </h2>
 
-          <p className="text-slate-300 text-base">
-            Detailed specifications, certified origins, and rigorous quality control parameters for international buyers.
+          <p className="text-slate-300 text-base max-w-xl mx-auto">
+            Certified origin grading, export specifications, and verified allocations.
           </p>
 
-          <div className="w-20 h-1 bg-gradient-to-r from-brand-gold to-brand-emerald mx-auto rounded-full" />
+          <div className="w-20 h-1 bg-gradient-to-r from-brand-gold to-sky-400 mx-auto rounded-full" />
         </div>
 
         {/* Category Tabs Filter */}
@@ -66,8 +66,8 @@ export default function ProductsGrid() {
               onClick={() => setSelectedCategory(cat)}
               className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 border ${
                 selectedCategory === cat
-                  ? 'bg-gradient-to-r from-brand-gold to-brand-goldLight text-brand-dark border-brand-gold shadow-glow scale-105'
-                  : 'bg-white/5 text-slate-300 border-white/10 hover:bg-white/10 hover:border-white/20'
+                  ? 'bg-gradient-to-r from-brand-gold via-amber-400 to-brand-goldLight text-brand-dark border-brand-gold shadow-glow scale-105'
+                  : 'bg-white/10 text-slate-200 border-white/15 hover:bg-white/15 hover:text-white hover:border-white/30'
               }`}
             >
               {cat}

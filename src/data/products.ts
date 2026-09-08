@@ -197,45 +197,6 @@ export const ENTERPRISE_INFO = {
   ],
 };
 
-export const BLOG_POSTS = [
-  {
-    id: 'cashew-season-2025',
-    title: 'Tanzania\'s Cashew Season 2025 – What Buyers Should Know',
-    category: 'Market Insights',
-    date: 'August 2025',
-    readTime: '4 min read',
-    summary: 'Key outturn forecasts, moisture benchmarks (50–55 LBS+), and harvesting updates from southern Tanzania cashew belts.',
-    hashtags: ['#CashewExports', '#TanzaniaExports', '#LushTradeCorp'],
-    content: 'As the 2025 cashew harvesting season kicks off across Mtwara, Masasi, Newala, and Tandahimba, international buyers in India and Vietnam are closely watching nut counts and kernel recovery rates. Lush Trade Corp Tanzania Limited maintains on-ground inspection teams at primary aggregation centers to guarantee 50–55 LBS+ outturn and 160–180 nut count per KG.',
-  },
-  {
-    id: 'tanzanian-coffee-global',
-    title: 'Why Tanzanian Coffee is Winning Global Hearts',
-    category: 'Commodity Focus',
-    date: 'July 2025',
-    readTime: '5 min read',
-    summary: 'Exploring the volcanic altitude profile of Kilimanjaro Arabica AAA and Bukoba Robusta FAQ grades.',
-    hashtags: ['#AfricanTrade', '#AgroExports', '#TanzaniaExports'],
-    content: 'Grown on the rich volcanic slopes of Mount Kilimanjaro, Mbeya high plateaus, and Bukoba shores, Tanzanian coffee delivers distinct bright acidity and rich aroma. Lush Trade Corp exports 60 kg PE-lined jute bags ensuring maximum flavor preservation during transit to European and Asian specialty roasters.',
-  },
-  {
-    id: 'reasons-source-africa',
-    title: '5 Reasons to Source Agro Commodities from Africa',
-    category: 'Trade Strategy',
-    date: 'June 2025',
-    readTime: '6 min read',
-    summary: 'From organic soil fertility to strategic port access at Mtwara and Dar es Salaam, learn why African sourcing is accelerating.',
-    hashtags: ['#SourcingFromAfrica', '#AfricanTrade', '#AgroExports'],
-    content: '1. Organic Soil Richness: High natural yield without heavy chemical intervention.\n2. Competitive Pricing: Direct farm-gate procurement.\n3. Strategic Maritime Ports: Fast vessel turnaround from Mtwara Port to Asian and European destinations.\n4. Verified Quality Standards: 98%+ purity in pulses and strict RCN outturn controls.\n5. Ethical Partnerships: Empowering smallholder agricultural communities.',
-  },
-  {
-    id: 'sustainable-trade-networks',
-    title: 'How Lush Trade Corp Builds Sustainable Trade Networks',
-    category: 'Enterprise News',
-    date: 'May 2025',
-    readTime: '5 min read',
-    summary: 'Bridging African farming producers with global buyers through integrity, innovation, and impactful partnerships.',
-    hashtags: ['#LushTradeCorp', '#AfricanSourcing', '#ExportCompanyTanzania'],
-    content: 'Lush Trade Corp Tanzania Limited bridges local Tanzanian farming cooperatives in Masasi, Dodoma, Arusha, and Iringa with international commodity traders. By managing 360° logistics, quality control, and phytosanitary documentation, we deliver unmatched trade security.',
-  },
-];
+export { BLOG_POSTS, BLOG_CATEGORIES } from './blogs';
+export type { BlogPost } from './blogs';
+

@@ -27,7 +27,6 @@ import { cn } from "@/lib/utils";
 
 const TILT_MAX = 8;
 const TILT_SPRING = { stiffness: 280, damping: 26 } as const;
-const GLOW_SPRING = { stiffness: 180, damping: 22 } as const;
 
 // ─── Thematic Palette per Product / Category ───────────────────────────────────
 
@@ -49,9 +48,9 @@ const THEME_MAP: Record<string, ProductTheme> = {
     badgeBg: "rgba(245, 158, 11, 0.15)",
   },
   pulses: {
-    color: "#10B981", // Emerald Ag
+    color: "#2563EB", // Cobalt Blue
     icon: Leaf,
-    badgeBg: "rgba(16, 185, 129, 0.15)",
+    badgeBg: "rgba(37, 99, 235, 0.15)",
   },
   coffee: {
     color: "#D97706", // Roasted Coffee Bronze
@@ -112,14 +111,12 @@ export default function ProductSpotlightCard({
 
   const rotateX = useSpring(rawRotateX, TILT_SPRING);
   const rotateY = useSpring(rawRotateY, TILT_SPRING);
-  const glowOpacity = useSpring(0, GLOW_SPRING);
   const rectRef = useRef<DOMRect | null>(null);
 
   const handleMouseEnter = () => {
     if (cardRef.current) {
       rectRef.current = cardRef.current.getBoundingClientRect();
     }
-    glowOpacity.set(1);
     onHoverStart();
   };
 
@@ -133,7 +130,6 @@ export default function ProductSpotlightCard({
   const handleMouseLeave = () => {
     normX.set(0.5);
     normY.set(0.5);
-    glowOpacity.set(0);
     rectRef.current = null;
     onHoverEnd();
   };
@@ -156,43 +152,27 @@ export default function ProductSpotlightCard({
       onMouseMove={handleMouseMove}
       onClick={() => onSelect(product)}
       className={cn(
-        "group relative flex flex-col overflow-hidden rounded-2xl border text-left cursor-pointer",
-        // Base dark enterprise styling with glass
-        "bg-brand-dark/90 border-brand-emerald/30 shadow-xl",
-        "transition-[border-color,box-shadow] duration-300",
-        "hover:border-brand-gold/60 hover:shadow-card-hover",
+        "group relative flex flex-col overflow-hidden rounded-2xl border-2 text-left cursor-pointer",
+        // Marine slate frosted glass with thickened luminous light borders
+        "bg-[#132842]/90 border-white/30 shadow-xl backdrop-blur-md",
+        "transition-[border-color,box-shadow,transform] duration-300",
+        "hover:border-brand-gold hover:shadow-2xl hover:-translate-y-1.5",
         "h-full",
         className
       )}
     >
-      {/* ─── Aurora Ambient Layers ─── */}
-      {/* 1. Static accent tint (always visible) */}
+      {/* ─── Ambient Background Layer ─── */}
+      {/* Subtle static accent tint */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 rounded-2xl z-0"
         style={{
-          background: `radial-gradient(ellipse at 25% 20%, ${theme.color}15, transparent 68%)`,
+          background: `radial-gradient(ellipse at 25% 20%, ${theme.color}12, transparent 70%)`,
         }}
-      />
-
-      {/* 2. Dynamic Spring Glow (lights up on hover) */}
-      <motion.div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 rounded-2xl z-0"
-        style={{
-          opacity: glowOpacity,
-          background: `radial-gradient(ellipse at 35% 25%, ${theme.color}35, transparent 65%)`,
-        }}
-      />
-
-      {/* 3. Shimmer Sweep highlight */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-y-0 left-0 w-[55%] -translate-x-full -skew-x-12 bg-gradient-to-r from-transparent via-white/[0.08] to-transparent transition-transform duration-700 ease-out group-hover:translate-x-[280%] z-20"
       />
 
       {/* ─── Card Visual Media ─── */}
-      <div className="relative h-56 w-full overflow-hidden bg-slate-800 rounded-t-2xl shrink-0 z-10">
+      <div className="relative h-56 w-full overflow-hidden bg-slate-900 rounded-t-2xl shrink-0 z-10">
         <Image
           src={product.image}
           alt={`Tanzania ${product.name} Exporter`}
@@ -202,17 +182,17 @@ export default function ProductSpotlightCard({
         />
         
         {/* Soft bottom image gradient for readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-dark/20 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#132842] via-transparent to-transparent pointer-events-none" />
 
         {/* Top Badges */}
         <div className="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-none z-10">
           {/* Category Pill with Icon */}
           <span
-            className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-lg text-xs font-bold backdrop-blur-md border shadow-sm"
+            className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-lg text-xs font-bold backdrop-blur-md border shadow-md"
             style={{
-              backgroundColor: "rgba(12, 53, 36, 0.85)",
-              color: theme.color,
-              borderColor: `${theme.color}40`,
+              backgroundColor: "rgba(255, 255, 255, 0.95)",
+              color: "#0F172A",
+              borderColor: "rgba(255, 255, 255, 0.5)",
             }}
           >
             <CategoryIcon className="w-3.5 h-3.5" style={{ color: theme.color }} />
@@ -221,7 +201,7 @@ export default function ProductSpotlightCard({
 
           {/* MOQ / Season Tag if present */}
           {(product.moq || product.season) && (
-            <span className="px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-black/60 backdrop-blur-md text-slate-300 border border-white/10 shadow-sm">
+            <span className="px-2.5 py-1 rounded-md text-[11px] font-bold bg-white/95 backdrop-blur-md text-slate-900 border border-white/50 shadow-md">
               {product.moq ? `MOQ: ${product.moq}` : product.season}
             </span>
           )}
@@ -253,11 +233,11 @@ export default function ProductSpotlightCard({
         </div>
 
         {/* Technical Highlight Badges */}
-        <div className="space-y-2 pt-2 border-t border-white/10">
+        <div className="space-y-2 pt-3 border-t border-white/15">
           {product.specs.slice(0, 2).map((spec, i) => (
             <div key={i} className="flex justify-between items-center text-xs">
-              <span className="text-slate-400 font-medium">{spec.label}:</span>
-              <span className="text-white font-bold bg-white/5 px-2 py-0.5 rounded border border-white/10">
+              <span className="text-slate-300 font-medium">{spec.label}:</span>
+              <span className="text-white font-bold bg-white/15 px-2.5 py-0.5 rounded-lg border border-white/20 shadow-sm">
                 {spec.value}
               </span>
             </div>
@@ -266,7 +246,7 @@ export default function ProductSpotlightCard({
 
         {/* Origins Tag if available */}
         {product.origins && product.origins.length > 0 && (
-          <div className="flex items-center space-x-1.5 text-[11px] text-slate-400 pt-0.5">
+          <div className="flex items-center space-x-1.5 text-[11px] text-slate-300 pt-0.5">
             <MapPin className="w-3.5 h-3.5 shrink-0" style={{ color: theme.color }} />
             <span className="truncate">Origins: {product.origins.join(", ")}</span>
           </div>
@@ -280,24 +260,11 @@ export default function ProductSpotlightCard({
               e.stopPropagation();
               onSelect(product);
             }}
-            className="w-full inline-flex items-center justify-center py-2.5 px-4 rounded-xl text-xs font-bold text-white transition-all duration-200 border group/btn shadow-sm"
-            style={{
-              backgroundColor: "rgba(12, 53, 36, 0.9)",
-              borderColor: `${theme.color}40`,
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#13543A";
-              e.currentTarget.style.borderColor = theme.color;
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "rgba(12, 53, 36, 0.9)";
-              e.currentTarget.style.borderColor = `${theme.color}40`;
-            }}
+            className="w-full inline-flex items-center justify-center py-2.5 px-4 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 transition-all duration-200 border border-blue-400/30 group/btn shadow-md hover:shadow-blue-500/25"
           >
-            <span>View Specifications & Grades</span>
+            <span>View Specifications</span>
             <ArrowRight 
-              className="w-3.5 h-3.5 ml-2 transition-transform duration-200 group-hover/btn:translate-x-1" 
-              style={{ color: theme.color }} 
+              className="w-3.5 h-3.5 ml-2 transition-transform duration-200 group-hover/btn:translate-x-1 text-brand-gold" 
             />
           </button>
         </div>

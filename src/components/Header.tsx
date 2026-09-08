@@ -1,152 +1,208 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
-import { Menu, X, ArrowRight, Phone } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { Menu, X, ArrowRight, Phone, BookOpen } from 'lucide-react';
 import { ENTERPRISE_INFO } from '@/data/products';
-import NavFlyingShip from './NavFlyingShip';
+import LanguageSelector from './LanguageSelector';
 
 export default function Header() {
-  const { scrollY } = useScroll();
+  const pathname = usePathname();
+  const isHomePage = pathname === '/';
+
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('hero');
+  const [isPastHero, setIsPastHero] = useState(false);
 
-  // Navbar UI appears only when the ship takes us to the main website (scrollY: 1150px -> 1500px)
-  const navUIOpacity = useTransform(scrollY, [1150, 1500], [0, 1]);
+  // Track active section and whether user has scrolled past the hero section
+  useEffect(() => {
+    const sectionIds = ['hero', 'about', 'products', 'usps', 'blog', 'contact'];
 
-  useMotionValueEvent(scrollY, 'change', (latest) => {
-    setIsScrolled(latest > 40);
-  });
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 30);
+
+      // Dynamic Island: activates after scrolling past the hero home screen
+      const hero = document.getElementById('hero');
+      if (hero) {
+        const heroBottom = hero.offsetTop + hero.offsetHeight - 250;
+        setIsPastHero(window.scrollY >= heroBottom);
+      } else {
+        setIsPastHero(window.scrollY > 500);
+      }
+
+      const scrollPosition = window.scrollY + 200;
+      for (let i = sectionIds.length - 1; i >= 0; i--) {
+        const id = sectionIds[i];
+        const element = document.getElementById(id);
+        if (element) {
+          const top = element.offsetTop;
+          if (scrollPosition >= top) {
+            setActiveSection(id);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Prevent background scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
 
   const navLinks = [
-    { name: 'Home', href: '#hero' },
-    { name: 'About Us', href: '#about' },
-    { name: 'Core Products', href: '#products' },
-    { name: 'Why Partner With Us', href: '#usps' },
-    { name: 'Trade Network', href: '#network' },
-    { name: 'Contact Us', href: '#contact' },
+    { name: 'About Us', href: isHomePage ? '#about' : '/#about', id: 'about' },
+    { name: 'Core Products', href: isHomePage ? '#products' : '/#products', id: 'products' },
+    { name: 'Why Us', href: isHomePage ? '#usps' : '/#usps', id: 'usps' },
+    { name: 'Blog', href: isHomePage ? '#blog' : '/#blog', id: 'blog' },
+    { name: 'Contact', href: isHomePage ? '#contact' : '/#contact', id: 'contact' },
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
-      {/* Background Frosted Glass Bar (Only fades in when approaching main website) */}
-      <motion.div
-        style={{ opacity: navUIOpacity }}
-        className={`absolute inset-0 transition-colors duration-300 pointer-events-none ${isScrolled
-          ? 'bg-white/95 backdrop-blur-md shadow-md py-3'
-          : 'bg-slate-950/60 backdrop-blur-md border-b border-white/10 py-4'
+    <>
+      <header
+        id="main-navbar"
+        className="fixed top-0 left-0 right-0 z-50 px-3 sm:px-6 lg:px-8 pt-2.5 sm:pt-3 pointer-events-none transition-all duration-300"
+      >
+        <div
+          className={`pointer-events-auto mx-auto max-w-7xl px-5 sm:px-8 lg:px-10 py-2 sm:py-2.5 flex items-center justify-between relative rounded-full transition-all duration-500 ${
+            isPastHero
+              ? 'bg-black/40 backdrop-blur-md border border-white/15 shadow-[0_10px_30px_rgba(0,0,0,0.25)]'
+              : 'bg-transparent border border-transparent shadow-none'
           }`}
-      />
-
-      {/* Main Navbar Bar */}
-      <nav className="relative transition-all duration-300 py-3 sm:py-4">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          {/* Logo / Company Name */}
-          <div className="flex items-center space-x-2.5">
-            {/* The Flying Vessel Dock (Always mounted, manages its own opacity & motion) */}
-            <div className="pointer-events-auto">
-              <NavFlyingShip />
+        >
+          {/* Left: Authentic Corporate Logo Typography */}
+          <Link href="/" className="flex flex-col select-none z-10 group focus:outline-none">
+            <span className="font-logo font-bold text-[15px] sm:text-[17px] tracking-[0.22em] text-white group-hover:text-amber-100 transition-colors uppercase leading-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
+              LUSH TRADE
+            </span>
+            <div className="flex items-center space-x-1.5 mt-1">
+              <span className="text-[7px] sm:text-[8px] font-sans font-extrabold tracking-[0.36em] text-brand-gold uppercase leading-none drop-shadow-[0_1px_4px_rgba(0,0,0,0.6)]">
+                TANZANIA LIMITED
+              </span>
             </div>
+          </Link>
 
-            <motion.a
-              href="#hero"
-              style={{ opacity: navUIOpacity }}
-              className="flex flex-col group focus:outline-none pointer-events-auto select-none"
-            >
-              <span
-                className={`font-bold text-base sm:text-lg leading-tight tracking-tight transition-colors ${isScrolled ? 'text-brand-dark' : 'text-white'
-                  }`}
-              >
-                LUSH TRADE CORP
-              </span>
-              <span className="text-[9.5px] tracking-widest text-brand-gold uppercase font-semibold">
-                Tanzania Limited
-              </span>
-            </motion.a>
-          </div>
-
-          {/* Desktop Navigation Links */}
-          <motion.div
-            style={{ opacity: navUIOpacity }}
-            className="hidden lg:flex items-center space-x-8 pointer-events-auto"
-          >
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className={`text-sm font-medium transition-colors hover:text-brand-gold ${isScrolled ? 'text-slate-700' : 'text-slate-100'
-                  }`}
-              >
-                {link.name}
-              </a>
-            ))}
-          </motion.div>
-
-          {/* CTA Button */}
-          <motion.div
-            style={{ opacity: navUIOpacity }}
-            className="hidden sm:flex items-center space-x-4 pointer-events-auto"
-          >
-            <a
-              href="#contact"
-              className="relative inline-flex items-center justify-center px-5 py-2.5 text-sm font-semibold text-brand-dark transition-all duration-200 bg-gradient-to-r from-brand-gold to-brand-goldLight rounded-lg shadow-md hover:shadow-glow hover:-translate-y-0.5 active:translate-y-0"
-            >
-              <span>Partner With Us</span>
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </a>
-          </motion.div>
-
-          {/* Mobile Menu Toggle */}
-          <motion.div
-            style={{ opacity: navUIOpacity }}
-            className="lg:hidden flex items-center pointer-events-auto"
-          >
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className={`p-2 rounded-lg ${isScrolled ? 'text-slate-800' : 'text-white'
-                } hover:bg-white/10`}
-              aria-label="Toggle Navigation Menu"
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </motion.div>
-        </div>
-
-        {/* Mobile Dropdown Menu */}
-        {mobileMenuOpen && (
-          <div className="lg:hidden bg-brand-dark/95 border-b border-brand-emerald/40 px-4 pt-4 pb-6 space-y-3 animate-in slide-in-from-top-4 duration-200">
-            <div className="flex flex-col space-y-3">
-              {navLinks.map((link) => (
+          {/* Center: Perfectly Centered Navigation Links (Borderless & Minimalist) */}
+          <nav className="hidden lg:flex items-center absolute left-1/2 -translate-x-1/2 gap-5 xl:gap-7 text-[12.5px] font-medium tracking-wide">
+            {navLinks.map((link) => {
+              const isActive = activeSection === link.id;
+              return (
                 <a
                   key={link.name}
                   href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-slate-200 font-medium px-3 py-2 rounded-md hover:bg-brand-emerald/40 hover:text-brand-gold transition-colors"
+                  onClick={() => setActiveSection(link.id)}
+                  className={`relative py-1 transition-colors duration-200 flex items-center gap-1.5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)] ${
+                    isActive
+                      ? 'text-white font-semibold'
+                      : 'text-white/75 hover:text-white'
+                  }`}
                 >
-                  {link.name}
+                  {isActive && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-brand-gold shadow-[0_0_8px_#C59B27]" />
+                  )}
+                  <span>{link.name}</span>
                 </a>
-              ))}
-              <div className="pt-2 border-t border-slate-700/50 flex flex-col space-y-2">
-                <a
-                  href={`tel:${ENTERPRISE_INFO.phone.replace(/\s+/g, '')}`}
-                  className="text-xs text-slate-300 flex items-center space-x-2 px-3 py-1"
-                >
-                  <Phone className="w-3.5 h-3.5 text-brand-gold" />
-                  <span>{ENTERPRISE_INFO.phone}</span>
-                </a>
-                <a
-                  href="#contact"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="inline-flex items-center justify-center w-full py-2.5 text-sm font-semibold text-brand-dark bg-gradient-to-r from-brand-gold to-brand-goldLight rounded-lg shadow"
-                >
-                  <span>Partner With Us</span>
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </a>
-              </div>
-            </div>
+              );
+            })}
+          </nav>
+
+          {/* Right: Sleek Luxury Pill "Get Started" Button + Language Selector */}
+          <div className="hidden sm:flex items-center space-x-3 z-10">
+            <a
+              href="#contact"
+              onClick={() => setActiveSection('contact')}
+              className="relative inline-flex items-center justify-center gap-1.5 px-4 py-1.5 text-[11.5px] font-extrabold uppercase tracking-wider text-brand-dark bg-gradient-to-r from-brand-gold via-brand-goldLight to-brand-gold rounded-full shadow-[0_0_16px_rgba(197,155,39,0.3)] hover:shadow-[0_0_24px_rgba(197,155,39,0.55)] hover:scale-105 active:scale-95 transition-all duration-300"
+            >
+              <span>Get Started</span>
+              <ArrowRight className="w-3 h-3" />
+            </a>
+
+            {/* Compact Language Selector icon */}
+            <LanguageSelector isHomePage={isHomePage} isScrolled={isScrolled} />
           </div>
-        )}
-      </nav>
-    </header>
+
+          {/* Mobile Right Bar: Language Icon + Hamburger */}
+          <div className="flex lg:hidden items-center space-x-2.5 z-10">
+            <LanguageSelector isHomePage={isHomePage} isScrolled={isScrolled} />
+
+            <button
+              type="button"
+              aria-label="Toggle navigation menu"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-1.5 text-white/90 hover:text-white focus:outline-none drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Mobile Full-Screen Menu */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-40 bg-[#090A0C]/98 backdrop-blur-2xl flex flex-col justify-between p-8 pt-28 lg:hidden animate-in fade-in duration-200">
+          <div className="flex flex-col space-y-5">
+            {navLinks.map((link) => {
+              const isActive = activeSection === link.id;
+              return (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  onClick={() => {
+                    setActiveSection(link.id);
+                    setMobileMenuOpen(false);
+                  }}
+                  className={`flex items-center justify-between text-xl font-medium tracking-wide py-2.5 border-b border-white/10 transition-colors ${
+                    isActive ? 'text-brand-gold' : 'text-slate-200 hover:text-brand-gold'
+                  }`}
+                >
+                  <span className="flex items-center gap-2">
+                    {link.name === 'Blog' && <BookOpen className="w-4 h-4 text-brand-gold" />}
+                    <span>{link.name}</span>
+                  </span>
+                </a>
+              );
+            })}
+          </div>
+
+          <div className="space-y-4 pt-6 border-t border-white/10">
+            <div className="flex items-center justify-between">
+              <span className="text-xs uppercase tracking-widest text-white/50 font-mono">
+                Direct Line
+              </span>
+              <a
+                href={`tel:${ENTERPRISE_INFO.phone.replace(/\s+/g, '')}`}
+                className="text-xs text-brand-gold flex items-center space-x-1.5 font-mono"
+              >
+                <Phone className="w-3 h-3" />
+                <span>{ENTERPRISE_INFO.phone}</span>
+              </a>
+            </div>
+
+            <a
+              href="#contact"
+              onClick={() => setMobileMenuOpen(false)}
+              className="w-full flex items-center justify-center gap-2 py-3.5 rounded-full bg-brand-gold text-brand-dark text-sm font-semibold tracking-wide shadow-lg active:scale-95 transition-transform"
+            >
+              <span>Partner Us</span>
+              <ArrowRight className="w-4 h-4" />
+            </a>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

@@ -3,7 +3,7 @@
 import React from 'react';
 
 interface WaveDividerProps {
-  /** Target section background color that the wave flows into (e.g. '#FAF9F6', '#0f172a', '#061D15') */
+  /** Target section background color that the wave flows into */
   color: string;
   /** Whether to place at the 'bottom' (default) or 'top' of the section */
   position?: 'bottom' | 'top';
@@ -28,7 +28,7 @@ export default function WaveDivider({
     <div
       aria-hidden="true"
       className={`absolute left-0 right-0 w-full overflow-hidden leading-none z-20 pointer-events-none select-none ${
-        isTop ? '-top-px rotate-180' : '-bottom-px'
+        isTop ? '-top-[2px] rotate-180' : '-bottom-[2px]'
       } ${className}`}
     >
       <svg
@@ -41,27 +41,26 @@ export default function WaveDivider({
       >
         {/* Layer 1: Ambient soft background swell */}
         <path
-          d="M0,32 C220,78 440,12 660,52 C880,92 1100,28 1320,68 Q1380,78 1440,72 L1440,120 L0,120 Z"
+          d="M0,28 C220,74 440,8 660,48 C880,88 1100,24 1320,64 Q1380,74 1440,68 L1440,125 L0,125 Z"
           fill="currentColor"
           fillOpacity="0.25"
         />
-        {/* Layer 2: Mid-swell wave */}
+        {/* Layer 2: Mid-swell ocean wave */}
         <path
-          d="M0,56 C260,105 500,28 760,72 C1020,116 1220,38 1440,78 L1440,120 L0,120 Z"
+          d="M0,52 C260,101 500,24 760,68 C1020,112 1220,34 1440,74 L1440,125 L0,125 Z"
           fill="currentColor"
           fillOpacity="0.55"
         />
-        {/* Layer 3: Foam crest line */}
+        {/* Layer 3: Foam crest line with subtle gold sheen */}
         <path
-          d="M0,82 C240,124 500,44 760,88 C1020,132 1240,58 1440,92"
-          stroke="#FFFFFF"
+          d="M0,78 C240,120 500,40 760,84 C1020,128 1240,54 1440,88"
+          stroke="rgba(197, 155, 39, 0.45)"
           strokeWidth="1.5"
-          strokeOpacity="0.8"
           fill="none"
         />
         {/* Layer 4: Solid foreground wave connecting directly into adjacent section background */}
         <path
-          d="M0,84 C240,126 500,46 760,90 C1020,134 1240,60 1440,94 L1440,120 L0,120 Z"
+          d="M0,80 C240,122 500,42 760,86 C1020,130 1240,56 1440,90 L1440,125 L0,125 Z"
           fill="currentColor"
         />
       </svg>
