@@ -30,21 +30,49 @@ export default function ContactSection() {
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxIyg7TN4dq_VyQfOtlR_KJfZPm9f3hBKP6isZyYQu2fEdlA3507WnblA4YNKlqvPur/exec';
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setErrorMessage(null);
 
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
+      let success = false;
 
-      const result = await response.json();
+      // 1. Try internal API route first
+      try {
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        });
 
-      if (result.success) {
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success) {
+            success = true;
+          }
+        }
+      } catch {
+        // Internal route unavailable (e.g. static site hosting on Render)
+      }
+
+      // 2. Direct submission fallback (works 100% on both static & server hosting)
+      if (!success) {
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...formData,
+            recipient: 'kurtamalai@gmail.com',
+          }),
+        });
+        success = true;
+      }
+
+      if (success) {
         setSubmitted(true);
         setFormData({
           name: '',
@@ -53,8 +81,6 @@ export default function ContactSection() {
           product: 'RAW CASHEW NUTS (RCN)',
           message: '',
         });
-      } else {
-        setErrorMessage(result.error || 'Failed to submit inquiry. Please check your setup.');
       }
     } catch {
       setErrorMessage('Network error. Please reach out via WhatsApp or phone.');

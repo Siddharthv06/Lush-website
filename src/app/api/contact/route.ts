@@ -1,16 +1,11 @@
 import { NextResponse } from 'next/server';
 
+const DEFAULT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxIyg7TN4dq_VyQfOtlR_KJfZPm9f3hBKP6isZyYQu2fEdlA3507WnblA4YNKlqvPur/exec';
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const scriptUrl = process.env.GOOGLE_APPS_SCRIPT_URL;
-
-    if (!scriptUrl) {
-      return NextResponse.json(
-        { success: false, error: 'Google Apps Script URL is not set in .env.local' },
-        { status: 500 }
-      );
-    }
+    const scriptUrl = process.env.GOOGLE_APPS_SCRIPT_URL || DEFAULT_SCRIPT_URL;
 
     const payload = {
       ...body,
