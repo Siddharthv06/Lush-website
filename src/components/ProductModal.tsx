@@ -91,7 +91,7 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
             <div className="relative h-64 rounded-xl overflow-hidden border border-slate-200">
               <Image
                 src={product.image}
-                alt={`Tanzania ${product.name} Export Spec`}
+                alt={product.altText}
                 fill
                 className="object-cover"
               />

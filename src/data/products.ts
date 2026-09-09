@@ -4,6 +4,7 @@ export interface Product {
   category: 'Agro-Commodities' | 'Timber';
   tagline: string;
   image: string;
+  altText: string;
   shortDesc: string;
   fullDesc: string;
   specs: {
@@ -26,7 +27,8 @@ export const PRODUCTS_DATA: Product[] = [
     name: 'RAW CASHEW NUTS (RCN)',
     category: 'Agro-Commodities',
     tagline: 'Superior Nut Count & High Kernel Recovery',
-    image: '/images/raw_cashews.jpg',
+    image: '/images/tanzanian-raw-cashew-nuts.jpg',
+    altText: 'Premium Tanzanian raw cashew nuts from Mtwara prepared for export',
     shortDesc: 'Known for superior nut count, high kernel recovery, and consistent moisture levels — preferred by global processors in India and Vietnam.',
     fullDesc: 'We source the finest Tanzanian Raw Cashew Nuts (RCN) known for their superior nut count, high kernel recovery, and consistent moisture levels — preferred by global processors in India and Vietnam. Lush Trade Corp Tanzania Limited is the best raw cashew nuts (RCN) exporter, producer and supplier in Tanzania operating from the roots to the end processors on a long-term basis.',
     specs: [
@@ -52,7 +54,8 @@ export const PRODUCTS_DATA: Product[] = [
     name: 'CASHEW NUT KERNELS',
     category: 'Agro-Commodities',
     tagline: 'Vacuum-Packed Whole & Broken Kernels for Retail & Industrial Use',
-    image: '/images/cashew_kernels.jpg',
+    image: '/images/tanzania-cashew-kernels.jpg',
+    altText: 'Tanzanian cashew kernels available in W180, W240, W320 and W450 grades',
     shortDesc: 'Processed and vacuum-packed to retain natural flavor, color, and crunch — ready for retail or industrial use worldwide.',
     fullDesc: 'Our kernels are carefully processed and vacuum-packed to retain natural flavor, color, and crunch — ready for retail or industrial use worldwide. Lush Trade Corp Tanzania Limited is the best cashew nut exporter, producer and supplier in Tanzania operating from the roots to the end processors on a long-term basis.',
     specs: [
@@ -85,7 +88,8 @@ export const PRODUCTS_DATA: Product[] = [
     name: 'PULSES (Chickpeas, Pigeon Peas, Kidney Beans, Green Mung Beans)',
     category: 'Agro-Commodities',
     tagline: '98%+ Purity Cleaned & Graded Tanzanian Legumes',
-    image: '/images/pulses.jpg',
+    image: '/images/tanzanian-pulses.jpg',
+    altText: 'Tanzanian chickpeas, pigeon peas, kidney beans and green mung beans for export',
     shortDesc: 'Cleaned and graded pulses rich in protein and taste, ideal for food industries and bulk buyers globally.',
     fullDesc: 'Tanzania\'s fertile soil produces export-quality pulses rich in protein and taste. We supply cleaned and graded pulses ideal for food industries and bulk buyers globally. Lush Trade Corp Tanzania Limited is the best pulses exporter, producer and supplier in Tanzania operating from the roots to the end processors on a long-term basis.',
     specs: [
@@ -113,7 +117,8 @@ export const PRODUCTS_DATA: Product[] = [
     name: 'COFFEE (Arabica & Robusta)',
     category: 'Agro-Commodities',
     tagline: 'High-Altitude Tanzanian Arabica & Robusta Green Beans',
-    image: '/images/coffee.jpg',
+    image: '/images/tanzanian-arabica-robusta-coffee.jpg',
+    altText: 'Tanzanian Arabica and Robusta coffee beans for international buyers',
     shortDesc: 'Arabica and Robusta coffee with rich aroma, uniform beans, and international certifications for global roasters.',
     fullDesc: 'We export Tanzanian Arabica and Robusta coffee with rich aroma, uniform beans, and international certifications. Ideal for roasters and distributors looking for consistent flavor profiles. Lush Trade Corp Tanzania Limited is the best coffee exporter, producer and supplier in Tanzania operating from the roots to the end processors on a long-term basis.',
     specs: [
@@ -145,7 +150,8 @@ export const PRODUCTS_DATA: Product[] = [
     name: 'TIMBER (Teak Wood & Pine Wood)',
     category: 'Timber',
     tagline: 'Kiln-Dried Hardwood & Softwood Export-Ready Timber',
-    image: '/images/timber.jpg',
+    image: '/images/tanzanian-teak-pine-timber.jpg',
+    altText: 'Tanzanian teak and pine timber prepared for export',
     shortDesc: 'Premium Tanzanian hardwood and softwood timber, kiln-dried and export-ready for furniture and construction.',
     fullDesc: 'We supply premium Tanzanian hardwood and softwood timber, kiln-dried and export-ready for furniture, construction, and industrial applications. Lush Trade Corp Tanzania Limited is the best timber exporter, producer and supplier in Tanzania operating from the roots to the end processors on a long-term basis.',
     specs: [

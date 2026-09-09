@@ -175,7 +175,7 @@ export default function ProductSpotlightCard({
       <div className="relative h-56 w-full overflow-hidden bg-slate-900 rounded-t-2xl shrink-0 z-10">
         <Image
           src={product.image}
-          alt={`Tanzania ${product.name} Exporter`}
+          alt={product.altText}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"

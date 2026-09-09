@@ -165,7 +165,7 @@ export default function HeroSection() {
           <h1 className="hero-title font-extrabold text-white tracking-tight leading-[1.12] drop-shadow-lg text-center mx-auto">
             <KineticCenterBuild
               align="center"
-              phrases={["Connecting Africa's Agricultural Strength to the World"]}
+              phrases={["Connecting Tanzania's Agricultural Strength to the World"]}
               highlightWords={["Agricultural", "Strength"]}
               highlightClassName="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-amber-200 to-white"
             />

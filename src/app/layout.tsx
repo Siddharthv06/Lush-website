@@ -24,35 +24,45 @@ const cinzel = Cinzel({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://www.lushtradecorptz.com'),
-  title: 'Lush Trade Corp Tanzania Limited | Africa’s Most Trusted Sourcing Partner',
-  description: 'Lush Trade Corp Tanzania Limited is a dynamic export-import enterprise based in Mtwara & Dar es Salaam, Tanzania. Exporters of Raw Cashew Nuts (RCN 50–55 LBS+ outturn), Cashew Kernels, Pulses, Coffee, and Timber across Africa, Asia, and Europe.',
+  metadataBase: new URL('https://lushtradecorp.com'),
+  title: 'Lush Trade Corp | Tanzania Export & Import Company',
+  description: 'Lush Trade Corp Tanzania Limited connects African producers with global buyers through premium cashews, agro-commodities, coffee, pulses, timber and international sourcing.',
   keywords: [
-    'Tanzania Cashew Nuts Exporter',
-    'Raw Cashew Nuts RCN Mtwara',
-    'Cashew Nut Kernels W180 W240 W320',
-    'Lush Trade Corp Tanzania Limited',
-    'Tanzanian Pulses Chickpeas Pigeon Peas Mung Beans',
-    'Kilimanjaro Arabica Coffee Export',
-    'Teak Wood Timber Tanzania',
-    'Mtwara Port Agro Commodities',
+    'Tanzania export company',
+    'Tanzania cashew exporter',
+    'Raw Cashew Nuts Tanzania',
+    'Cashew kernel Tanzania',
+    'African agro commodity exporter',
+    'Tanzania coffee exporter',
+    'Tanzania pulses exporter',
+    'Tanzania timber exporter',
+    'African sourcing partner',
+    'Tanzania import export company'
   ],
   authors: [{ name: 'Lush Trade Corp Tanzania Limited' }],
+  alternates: {
+    canonical: 'https://lushtradecorp.com',
+  },
   openGraph: {
-    title: 'Lush Trade Corp Tanzania Limited | Premier Export-Import Enterprise',
-    description: 'Dynamic export-import enterprise based in Mtwara, Tanzania. Sourcing, processing, and trading premium agro-commodities globally.',
+    title: 'Lush Trade Corp | Tanzania Export & Import Company',
+    description: 'Lush Trade Corp Tanzania Limited connects African producers with global buyers through premium cashews, agro-commodities, coffee, pulses, timber and international sourcing.',
     url: 'https://lushtradecorp.com',
-    siteName: 'Lush Trade Corp Tanzania Limited',
+    siteName: 'Lush Trade Corp',
     images: [
       {
-        url: '/images/hero.jpg',
+        url: '/images/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Tanzania Cashew Nuts Exporter Shipping Port',
+        alt: 'Lush Trade Corp Tanzania - Export and Import Company',
       },
     ],
-    locale: 'en_US',
+    locale: 'en_TZ',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Lush Trade Corp | Tanzania Export & Import Company',
+    description: 'Lush Trade Corp Tanzania Limited connects African producers with global buyers through premium cashews, agro-commodities, coffee, pulses, timber and international sourcing.',
   },
   robots: {
     index: true,
@@ -68,6 +78,27 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${plusJakartaSans.variable} ${cinzel.variable}`}>
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Lush Trade Corp Tanzania Limited",
+              "url": "https://lushtradecorp.com",
+              "email": "lushtradecorp@gmail.com",
+              "telephone": "+255639354286",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Plot No. 658, near Nangwanda Stadium, P.O. Box 444",
+                "addressLocality": "Mtwara",
+                "addressCountry": "Tanzania"
+              },
+              "areaServed": ["Mtwara", "Dar es Salaam"],
+              "description": "Lush Trade Corp Tanzania Limited is an export-import enterprise based in Mtwara, Tanzania, engaged in sourcing, processing and trading agro-commodities and industrial products across Africa, Asia and Europe."
+            })
+          }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `
